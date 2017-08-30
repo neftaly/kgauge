@@ -22,9 +22,9 @@ const DigitalGauge = pure(
   ({
     width,
     height,
-    title,
+    label,
     value,
-    units,
+    unit,
     low,
     high
   }) => <div style={{
@@ -38,7 +38,7 @@ const DigitalGauge = pure(
       padding: '0.5vw',
       textAlign: 'center',
       opacity: 0.5
-    }} children={title} />
+    }} children={label} />
     <div style={{
       color: color(low, Number(value), high),
       fontFamily: `'Roboto Mono'`,
@@ -58,7 +58,7 @@ const DigitalGauge = pure(
       bottom: '0',
       right: '0',
       opacity: 0.5
-    }} children={units} />
+    }} children={unit} />
   </div>
 );
 

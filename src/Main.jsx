@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 const Main = pure(
   ({ local, remote }) => {
     const vessel = remote.getIn(
-      [ 'vessels', remote.getIn(['server', 'self']) ],
+      [ 'vessels', remote.get('self') ],
       new Map()
     );
 
@@ -24,8 +24,8 @@ const Main = pure(
           (gauge, key) => <Gauge
             key={key}
             options={gauge}
-            units={local.get('units')}
-            value={vessel.getIn(gauge.get('path'))}
+            unitTypes={local.get('unitTypes')}
+            state={vessel.getIn(gauge.get('path'))}
           />
         )
       } />

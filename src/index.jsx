@@ -7,16 +7,21 @@ import kumara from 'kumara';
 const remote = immstruct({});
 
 const local = immstruct({
-  endpoint: 'ws://demo.signalk.org/signalk/v1/stream?subscribe=all',
-  units: {
-    'kelvin': 'celsius',
-    'pascal': 'megapascals',
+  endpoint: 'http://demo.signalk.org/signalk',
+  unitTypes: {
+    'K': 'celsius',
+    'Pa': 'mPa',
+    'm': 'meters',
     'm/s': 'knots',
+    'm/s2': 'm/s2',
     'm2': 'm2',
     'm3': 'liters',
     'm3/s': 'l/s',
-    'rad': 'degrees',
-    'rad/s': 'degrees/second'
+    'N': 'N',
+    'kg': 'kg',
+    'rad': 'deg',
+    'rad/s': 'deg/s',
+    'rad/s2': 'deg/s2'
   },
   gauges: [
     {
@@ -46,11 +51,6 @@ const local = immstruct({
       y: 1
     },
     {
-      path: ['navigation', 'datetime'],
-      x: 1,
-      y: 3
-    },
-    {
       path: ['electrical', 'batteries', '1', 'voltage'],
       x: 2,
       y: 1
@@ -63,7 +63,8 @@ const local = immstruct({
     {
       path: ['electrical', 'batteries', '1', 'temperature'],
       x: 1,
-      y: 2
+      y: 2,
+      units: 'K'
     },
     {
       path: ['environment', 'depth', 'belowKeel'],
@@ -105,7 +106,7 @@ const render = () => {
 };
 
 local.on('swap', render);
-remote.on('swap', render);
+remote.on('swap', (...args) => !window.x && render(...args));
 
 if (module.hot) {
   module.hot.accept('./Main', render);

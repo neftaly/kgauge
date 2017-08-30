@@ -2,78 +2,95 @@ import React from 'react';
 import { pure } from 'recompose';
 import math from 'mathjs';
 import R from 'ramda';
-import defaults from './defaults';
 import DigitalGauge from './DigitalGauge';
 import format from 'format-number';
+import { Map } from 'immutable';
+import getSchemaMeta from './getSchemaMeta';
+
+// Guess datum title from path
+const guessTitle = R.memoize(
+  R.compose(
+    R.toLower,
+    R.join(' '),
+    R.map(R.replace(/([A-Z])/g, ' $1')),
+    R.tail
+  )
+);
 
 math.createUnit({
   'knots': {
     definition: '0.514444m/s',
     aliases: ['knot', 'kt', 'kts']
-  },
-  'time': {
-    definition: '1 second'
   }
 });
 
 const Wrapper = pure(
-  ({ width, height, type, x, y, ...props }) => <div style={{
-    width: `calc(${width} * 20vw - 1px)`,
-    height: `calc(${height} * 20vw - 1px)`,
+  ({ type, x, y, ...props }) => <div style={{
+    width: `calc(${props.width} * 20vw - 1px)`,
+    height: `calc(${props.height} * 20vw - 1px)`,
     left: `calc(${x} * 20vw)`,
     top: `calc(${y} * 20vw)`,
     position: 'absolute',
-    overflow: 'hidden',
-    backgroundColor: 'silver'
+    // backgroundColor: 'silver',
+    overflow: 'hidden'
   }} children={(() => {
     switch (type) {
       case 'digital':
       default:
-        return <DigitalGauge {...{
-          width,
-          height,
-          ...props
-        }} />;
+        return <DigitalGauge {...props} />;
     }
   })()} />
 );
 
-const Gauge = pure(
-  ({ value = NaN, units, options }) => {
-    const path = options.get('path').toArray();
-    const {
-      unit: inUnit,
-      outUnit = units.get(inUnit, inUnit),
-      integer,
-      fraction,
-      parser = R.identity,
-      serializer = R.identity,
-      ...rest
-    } = R.merge(
-      R.path(path, defaults),
-      options.toJS()
-    );
-    const result = R.tryCatch(
-      R.compose(
-        serializer,
-        format({
-          padLeft: integer,
-          round: fraction,
-          padRight: fraction,
-          integerSeparator: ''
-        }),
-        v => v.toNumber(outUnit),
-        v => math.unit(v, inUnit),
-        parser
-      ),
-      R.always('ERR')
-    )(value);
-    return <Wrapper
-      {...rest}
-      value={result}
-      units={outUnit}
-    />;
-  }
-);
+const Gauge = ({
+  state = new Map(),
+  unitTypes,
+  options
+}) => {
+  const path = options.get('path');
+  const {
+    units, // inunit
+    unit = unitTypes.get(units, units), // outunit
+    integer,
+    fraction = 2,
+    parser = R.identity,
+    serializer = R.identity,
+    ...rest
+  } = new Map({
+    label: guessTitle(path),
+    width: 1,
+    height: 1
+  }).merge(
+    getSchemaMeta(path),
+    state.get('meta'),
+    options
+  ).toJS();
+
+  const result = R.tryCatch(
+    R.compose(
+      serializer,
+      format({
+        padLeft: integer,
+        round: fraction,
+        padRight: fraction,
+        integerSeparator: ''
+      }),
+      v => v.toNumber(unit),
+      v => math.unit(v, units),
+      parser,
+      R.defaultTo(NaN)
+    ),
+    R.always('ERR')
+  )(
+    state.get('value')
+  );
+
+  return <Wrapper
+    {...rest}
+    value={result}
+    unit={unit}
+    data-tip='React-tooltip'
+  />;
+};
 
 export default Gauge;
