@@ -1,34 +1,49 @@
 import { pure } from 'recompose';
-import Gauge from './Gauge';
-import { Map } from 'immutable';
+import R from 'ramda';
+import Gauges from './Gauges';
+import Config from './Config';
 
 const Main = pure(
   ({ local, remote }) => {
-    const vessel = remote.getIn(
-      [ 'vessels', remote.get('self') ],
-      new Map()
-    );
+    const page = local.get('page');
 
-    return <div>
-      <div style={{
-        width: '100%',
-        font: `2vw Roboto`,
-        position: 'relative',
-        overflow: 'hidden',
-        overflowY: 'scroll',
-        height: '100vh'
-      }} children={
-        local.get(
-          'gauges'
-        ).map(
-          (gauge, key) => <Gauge
-            key={key}
-            options={gauge}
-            unitTypes={local.get('unitTypes')}
-            state={vessel.getIn(gauge.get('path'))}
-          />
-        )
-      } />
+    return <div style={{
+      width: '100%',
+      fontSize: '2vw Roboto',
+      position: 'relative',
+      overflow: 'hidden',
+      overflowY: 'scroll',
+      height: '100vh'
+    }}>
+      <div>
+        <select
+          value={page}
+          onChange={
+            event => local.set('page', event.target.value)
+          }
+          children={
+            R.map(
+              name => <option children={name} />,
+              [ 'gauges', 'config' ]
+            )
+          }
+        />
+        {' '}
+        <b children={local.get('endpoint')} />
+        {' '}
+        <button
+          onClick={
+            event => {
+              const oldEndpoint = local.get('endpoint');
+              const endpoint = prompt('Endpoint address?', oldEndpoint);
+              if (endpoint) local.set('endpoint', endpoint);
+            }
+          }
+          children='connect'
+        />
+      </div>
+      { page === 'config' && <Config local={local} /> }
+      { page === 'gauges' && <Gauges local={local} remote={remote} /> }
     </div>;
   }
 );

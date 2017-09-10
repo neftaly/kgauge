@@ -7,6 +7,7 @@ import kumara from 'kumara';
 const remote = immstruct({});
 
 const local = immstruct({
+  page: 'gauges',
   endpoint: 'http://demo.signalk.org/signalk',
   unitTypes: {
     'K': 'celsius',

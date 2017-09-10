@@ -1,6 +1,6 @@
 {
   "name": "kgauge",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": "https://github.com/neftaly/kgauge",
   "license": "MIT",
   "scripts": {
