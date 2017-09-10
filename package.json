@@ -1,5 +1,6 @@
 {
   "name": "kgauge",
+  "version": "0.0.1",
   "repository": "https://github.com/neftaly/kgauge",
   "license": "MIT",
   "scripts": {
@@ -7,11 +8,17 @@
     "start": "webpack-dev-server --hot --inline --port 3000 --host 0.0.0.0",
     "test": "semistandard | snazzy"
   },
+  "keywords": [
+    "signal k",
+    "signalk",
+    "marine",
+    "signalk-webapp"
+  ],
   "dependencies": {
     "format-number": "^3.0.0",
     "immstruct": "^2.0.0",
     "immutable": "^3.8.1",
-    "kumara": "file:../kumara",
+    "kumara": "^0.2.1",
     "mathjs": "^3.16.3",
     "normalize.css": "^7.0.0",
     "ramda": "^0.24.1",
