@@ -1,12 +1,13 @@
 {
   "name": "kgauge",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/neftaly/kgauge",
   "license": "MIT",
   "scripts": {
     "build": "(rm -rf docs || true) && webpack -p",
     "start": "webpack-dev-server --hot --inline --port 3000 --host 0.0.0.0",
-    "test": "semistandard | snazzy"
+    "test": "semistandard | snazzy",
+    "prepublishOnly": "npm test && npm run build"
   },
   "keywords": [
     "signal k",
@@ -19,6 +20,7 @@
     "immstruct": "^2.0.0",
     "immutable": "^3.8.1",
     "kumara": "^0.2.1",
+    "localforage": "^1.5.0",
     "mathjs": "^3.16.3",
     "normalize.css": "^7.0.0",
     "ramda": "^0.24.1",
@@ -29,7 +31,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.0",
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
