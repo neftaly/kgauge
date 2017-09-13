@@ -2,6 +2,7 @@ import R from 'ramda';
 import immstruct from 'immstruct';
 import { fromJS } from 'immutable';
 import localforage from 'localforage';
+import kumara from 'kumara';
 
 const storageKey = 'kgauge.2017-09-12';
 
@@ -22,6 +23,12 @@ const initial = {
     'rad': 'deg',
     'rad/s': 'deg/s',
     'rad/s2': 'deg/s2'
+  },
+  dialogs: {
+    connect: {
+      visible: false,
+      endpoint: undefined
+    }
   },
   gauges: [
     {
@@ -106,6 +113,22 @@ localforage.getItem(
 local.on(
   'next-animation-frame',
   s => localforage.setItem(storageKey, s)
+);
+
+// Connect whenever endpoint changes
+let connection;
+local.reference(
+  'endpoint'
+).observe(
+  endpoint => {
+    if (connection) connection.end(true);
+    if (!endpoint) return;
+    connection = kumara(
+      endpoint
+    ).map(
+      s => remote.cursor().set(s)
+    );
+  }
 );
 
 const remote = immstruct({});

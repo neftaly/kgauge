@@ -1,9 +1,8 @@
 import { pure } from 'recompose';
+import { Text } from 'react-native';
 
 const Loading = pure(
-  () => <div>
-    Loading
-  </div>
+  () => <Text children='Loading' />
 );
 
 export default Loading;

@@ -1,28 +1,10 @@
-import 'normalize.css';
-import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import kumara from 'kumara';
 import { remote, local } from './state';
-
-// Connect whenever endpoint changes
-let connection;
-local.reference(
-  'endpoint'
-).observe(
-  endpoint => {
-    if (connection) connection.end(true);
-    if (!endpoint) return;
-    connection = kumara(
-      endpoint
-    ).map(
-      s => remote.cursor().set(s)
-    );
-  }
-);
+import ReactNative from 'react-native';
 
 const render = () => {
   const Component = require('./Main').default;
-  ReactDOM.render(
+  ReactNative.render(
     <AppContainer children={
       <Component
         local={local.cursor()}

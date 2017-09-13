@@ -1,34 +1,39 @@
 import { pure } from 'recompose';
-import R from 'ramda';
+import { Map } from 'immutable';
+import {
+  Text,
+  View,
+  Button,
+  Picker
+} from 'react-native';
 
 const Header = pure(
-  ({ local }) => <div>
-    <select
-      value={local.get('page')}
-      onChange={
-        event => local.set('page', event.target.value)
-      }
-      children={
-        R.map(
-          name => <option children={name} />,
-          [ 'gauges', 'config' ]
-        )
-      }
-    />
-    {' '}
-    <b children={local.get('endpoint')} />
-    {' '}
-    <button
-      onClick={
-        event => {
-          const oldEndpoint = local.get('endpoint');
-          const endpoint = prompt('Endpoint address?', oldEndpoint);
-          if (endpoint) local.set('endpoint', endpoint);
+  ({ local }) => <View>
+    <Picker
+      selectedValue={local.get('page')}
+      onValueChange={value => local.set('page', value)}
+    >
+      <option label='Gauges' value='gauges' />
+      <option label='Config' value='config' />
+    </Picker>
+    <Text children={local.get('endpoint')} />
+    <View style={{ width: 100 }}>
+      <Button
+        onPress={
+          event => local.updateIn(
+            [ 'dialogs', 'connect' ],
+            new Map(),
+            connect => connect.set(
+              'visible', true
+            ).set(
+              'endpoint', local.get('endpoint')
+            )
+          )
         }
-      }
-      children='connect'
-    />
-  </div>
+        title='connect'
+      />
+    </View>
+  </View>
 );
 
 export default Header;

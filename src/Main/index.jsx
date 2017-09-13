@@ -3,6 +3,7 @@ import Header from './Header';
 import Config from './Config';
 import Gauges from './Gauges';
 import Loading from './Loading';
+import { View } from 'react-native';
 
 const Main = pure(
   ({ local, remote }) => {
@@ -10,18 +11,11 @@ const Main = pure(
 
     if (page === 'loading') return <Loading />;
 
-    return <div style={{
-      width: '100%',
-      fontSize: '2vw Roboto',
-      position: 'relative',
-      overflow: 'hidden',
-      overflowY: 'scroll',
-      height: '100vh'
-    }}>
+    return <View>
       <Header local={local} />
       { page === 'config' && <Config local={local} /> }
       { page === 'gauges' && <Gauges local={local} remote={remote} /> }
-    </div>;
+    </View>;
   }
 );
 
