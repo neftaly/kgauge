@@ -1,6 +1,6 @@
 import { pure } from 'recompose';
 import { fromJS } from 'immutable';
-import R from 'ramda';
+import * as R from 'ramda';
 
 const Gauges = pure(
   ({ gauges }) => <div>

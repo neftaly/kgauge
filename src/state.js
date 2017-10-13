@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import immstruct from 'immstruct';
 import { fromJS } from 'immutable';
 import localforage from 'localforage';

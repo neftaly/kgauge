@@ -1,5 +1,5 @@
 import { pure } from 'recompose';
-import R from 'ramda';
+import memoizee from 'memoizee';
 
 const color = (low, value, high) => {
   if (low && value <= low) return 'orange';
@@ -8,7 +8,7 @@ const color = (low, value, high) => {
   return 'black';
 };
 
-const largestFont = R.memoize(
+const largestFont = memoizee(
   (width, height, length) => {
     const size = 3 / 5 * Math.max(
       height >= width ? 1 : width * 3,

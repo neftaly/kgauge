@@ -1,6 +1,7 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import metadata from 'signalk-schema/keyswithmetadata.json';
 import { fromJS } from 'immutable';
+import memoizee from 'memoizee';
 
 const metadataByRegex = R.compose(
   R.reject(
@@ -24,7 +25,7 @@ const metadataByRegex = R.compose(
   R.toPairs
 )(metadata);
 
-const getSchemaMeta = R.memoize(
+const getSchemaMeta = memoizee(
   R.compose(
     fromJS,
     R.defaultTo({}),

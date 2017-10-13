@@ -1,14 +1,15 @@
 import React from 'react';
 import { pure } from 'recompose';
 import math from 'mathjs';
-import R from 'ramda';
+import * as R from 'ramda';
 import DigitalGauge from './DigitalGauge';
 import format from 'format-number';
 import { Map } from 'immutable';
 import getSchemaMeta from './getSchemaMeta';
+import memoizee from 'memoizee';
 
 // Guess datum title from path
-const guessTitle = R.memoize(
+const guessTitle = memoizee(
   R.compose(
     R.toLower,
     R.join(' '),

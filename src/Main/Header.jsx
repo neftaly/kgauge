@@ -1,5 +1,5 @@
 import { pure } from 'recompose';
-import R from 'ramda';
+import * as R from 'ramda';
 
 const Header = pure(
   ({ local }) => <div>
