@@ -99,10 +99,9 @@ const Gauge = pure(
 const Gauges = pure(
   ({ local, remote }) => {
     const vessel = remote.getIn(
-      [ 'vessels', remote.get('self') ],
+      [ 'vessels', remote.get('self').replace('vessels.', '') ],
       new Map()
     );
-
     return <div
       style={{
         position: 'relative',
